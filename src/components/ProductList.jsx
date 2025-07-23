@@ -1,10 +1,12 @@
+// src/components/ProductList.jsx
 import React, { useEffect, useState } from 'react';
 import Card from './Card';
 import './ProductList.css';
 
-const ProductList = () => {
+const ProductList = ({ agregarAlCarrito }) => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [busqueda, setBusqueda] = useState('');
 
   useEffect(() => {
     fetch('https://fakestoreapi.com/products')
@@ -19,15 +21,36 @@ const ProductList = () => {
       });
   }, []);
 
+  const productosFiltrados = productos.filter(p =>
+    p.title.toLowerCase().includes(busqueda.toLowerCase())
+  );
+
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="product-list">
       <h2>Lista de Productos</h2>
+
+      <input
+        type="text"
+        placeholder="Buscar por nombre"
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
+        className="search-input"
+      />
+
       {loading ? (
         <p>Cargando productos...</p>
       ) : (
         <div className="product-container">
-          {productos.map(p => (
-           <Card key={p.id} title={p.title} price={p.price} image={p.image} category={p.category} rating={p.rating}/>
+          {productosFiltrados.map(p => (
+            <Card
+              key={p.id}
+              title={p.title}
+              price={p.price}
+              image={p.image}
+              category={p.category}
+              rating={p.rating}
+              onAddToCart={() => agregarAlCarrito(p)}
+            />
           ))}
         </div>
       )}
