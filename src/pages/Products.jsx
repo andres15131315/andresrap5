@@ -4,7 +4,8 @@ import ProductList from '../components/ProductList';
 
 const Products = ({ agregarAlCarrito }) => {
   return (
-    <div>
+     <div>
+      {/* Mostramos la lista de productos y le pasamos la funcion para agregar al carrito */}
       <ProductList agregarAlCarrito={agregarAlCarrito} />
     </div>
   );
